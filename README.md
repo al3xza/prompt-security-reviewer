@@ -55,39 +55,20 @@ Paste or attach a prompt and ask something like:
 - "Audit this agent prompt for prompt injection and GDPR issues."
 - "Harden this RAG template."
 
-## Pre-scan script
+## Pre-scan
 
-`skills/prompt-security-reviewer/scripts/prescan.py` is a deterministic scanner the skill runs first. It flags hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs and override language. It runs locally, uses only the Python standard library, and makes no network calls; the plugin sends no data anywhere. You can also run it on its own:
+Before the main review, the skill runs a quick pass from `references/prescan-checklist.md`. It flags hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs and override language. Its matches are leads, not verdicts: they include false positives, and the checklist cannot see missing controls.
 
-```bash
-python3 skills/prompt-security-reviewer/scripts/prescan.py prompt.txt
-```
-
-```bash
-cat prompt.txt | python3 skills/prompt-security-reviewer/scripts/prescan.py - --json
-```
-
-Its output is a list of leads, not verdicts: it has false positives and cannot see missing controls.
+The plugin is instructions only. It runs no code, sends no data anywhere and fetches nothing.
 
 ## Repository layout
 
 ```
 .claude-plugin/plugin.json                      Plugin manifest
+.claude-plugin/icon.png                         Directory icon
 skills/prompt-security-reviewer/SKILL.md        Skill definition and workflow
-skills/prompt-security-reviewer/references/     One file per framework, plus hardening patterns and output templates
-skills/prompt-security-reviewer/scripts/        Mechanical pre-scan (prescan.py)
-tests/                                          Unit tests for the pre-scan
+skills/prompt-security-reviewer/references/     One file per framework, plus the pre-scan checklist, hardening patterns and output templates
 ```
-
-## Development
-
-The pre-scan uses only the Python standard library (3.9 or later). Run the tests with:
-
-```bash
-python3 -m unittest discover -s tests
-```
-
-GitHub Actions runs the same tests on every push and pull request.
 
 ## Security
 
@@ -101,7 +82,7 @@ To report a vulnerability, see [SECURITY.md](SECURITY.md). Please don't open a p
 
 ## Author
 
-See [AUTHORS](AUTHORS).
+See [AUTHORS](AUTHORS.md).
 
 ## License
 
