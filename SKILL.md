@@ -52,7 +52,7 @@ Load only the reference files that apply. Reading all of them every time wastes 
 | Always | File |
 |---|---|
 | Core hardening patterns and severity rubric | `references/hardening-patterns.md` |
-| OWASP Top 10 for LLM Applications (2025) | `references/owasp-llm-top10.md` |
+| OWASP Top 10 for LLM Applications (2026) | `references/owasp-llm-top10.md` |
 
 | When the prompt… | Also read |
 |---|---|

@@ -6,7 +6,7 @@ It works on system prompts, agent and tool prompts, RAG templates, and any promp
 
 ## What it checks
 
-- **OWASP Top 10 for LLM Applications (2025)** (always)
+- **OWASP Top 10 for LLM Applications (2026)** (always)
 - **OWASP Top 10 for Agentic Applications** (for prompts that use tools, MCP, memory or multiple agents)
 - **OWASP Top 10 Web** (for prompts that emit HTML, SQL, shell, URLs or call APIs)
 - **EU AI Act** and **GDPR** (for prompts that serve EU users or touch personal data)
