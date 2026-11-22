@@ -40,7 +40,7 @@ Capture:
 Run the pre-scan script on the prompt text. It catches mechanical issues (hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs, absolutist override language) cheaply and deterministically, so your attention goes to judgment calls:
 
 ```bash
-python3 scripts/prescan.py path/to/prompt.txt     # or: cat prompt.txt | python3 scripts/prescan.py -
+python3 "${CLAUDE_SKILL_DIR}/scripts/prescan.py" path/to/prompt.txt     # or: cat prompt.txt | python3 "${CLAUDE_SKILL_DIR}/scripts/prescan.py" -
 ```
 
 Treat its output as leads, not verdicts. It produces false positives and cannot see missing controls.

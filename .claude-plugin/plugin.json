@@ -1,0 +1,11 @@
+{
+  "name": "prompt-security-reviewer",
+  "displayName": "Prompt Security Reviewer",
+  "version": "1.0.0",
+  "description": "Audit an LLM prompt against OWASP Top 10 for LLM and Agentic Applications, EU AI Act, GDPR and NIST AI RMF, then get a hardened version.",
+  "author": { "name": "al3xza", "url": "https://github.com/al3xza" },
+  "homepage": "https://github.com/al3xza/prompt-security-reviewer",
+  "repository": "https://github.com/al3xza/prompt-security-reviewer",
+  "license": "MIT",
+  "keywords": ["security", "prompt-injection", "owasp", "gdpr", "eu-ai-act", "compliance"]
+}

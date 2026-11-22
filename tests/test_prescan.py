@@ -1,4 +1,4 @@
-"""Tests for scripts/prescan.py. Run with: python3 -m unittest discover -s tests
+"""Tests for skills/prompt-security-reviewer/scripts/prescan.py. Run with: python3 -m unittest discover -s tests
 
 Fake secrets are assembled at runtime so that this file never contains a string
 that looks like a real credential to secret scanners.
@@ -10,8 +10,9 @@ import sys
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCRIPT = os.path.join(ROOT, "scripts", "prescan.py")
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
+SCRIPTS = os.path.join(ROOT, "skills", "prompt-security-reviewer", "scripts")
+SCRIPT = os.path.join(SCRIPTS, "prescan.py")
+sys.path.insert(0, SCRIPTS)
 
 import prescan  # noqa: E402
 

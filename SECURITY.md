@@ -12,9 +12,9 @@ You should get a first reply within 7 days. Once a fix is ready, it will be rele
 
 In scope:
 
-- `scripts/prescan.py` leaking secrets or personal data in its output, crashing or hanging on crafted input, or doing anything beyond reading the given file or stdin
-- Instructions in `SKILL.md` or `references/` that could lead Claude to follow instructions hidden in the prompt under review, write attack payloads, or reproduce secrets it was shown
-- Guidance in `references/` that is wrong in a way that would make a reviewed prompt less safe
+- `skills/prompt-security-reviewer/scripts/prescan.py` leaking secrets or personal data in its output, crashing or hanging on crafted input, or doing anything beyond reading the given file or stdin
+- Instructions in `skills/prompt-security-reviewer/SKILL.md` or its `references/` that could lead Claude to follow instructions hidden in the prompt under review, write attack payloads, or reproduce secrets it was shown
+- Guidance in the skill's `references/` that is wrong in a way that would make a reviewed prompt less safe
 
 Out of scope:
 

@@ -26,17 +26,26 @@ Ask for one by name, or let the skill pick from your wording ("audit this" → F
 
 ## Install
 
+This repo is a Claude plugin that contains one skill.
+
+### Claude.ai, Claude desktop and Cowork
+
+Open the Claude directory, search for **Prompt Security Reviewer** and add it.
+
 ### Claude Code
 
 ```bash
-git clone https://github.com/al3xza/prompt-security-reviewer ~/.claude/skills/prompt-security-reviewer
+npx skills add al3xza/prompt-security-reviewer -g -a claude-code
+```
+
+Or copy the skill folder by hand:
+
+```bash
+git clone https://github.com/al3xza/prompt-security-reviewer /tmp/prompt-security-reviewer
+cp -R /tmp/prompt-security-reviewer/skills/prompt-security-reviewer ~/.claude/skills/
 ```
 
 Restart Claude Code and the skill will be listed.
-
-### Claude.ai / Claude desktop
-
-Download this repo as a ZIP (**Code → Download ZIP**), then upload it under **Settings → Capabilities → Skills**.
 
 ## Usage
 
@@ -48,14 +57,14 @@ Paste or attach a prompt and ask something like:
 
 ## Pre-scan script
 
-`scripts/prescan.py` is a deterministic scanner the skill runs first. It flags hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs and override language. You can also run it on its own:
+`skills/prompt-security-reviewer/scripts/prescan.py` is a deterministic scanner the skill runs first. It flags hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs and override language. It runs locally, uses only the Python standard library, and makes no network calls; the plugin sends no data anywhere. You can also run it on its own:
 
 ```bash
-python3 scripts/prescan.py prompt.txt
+python3 skills/prompt-security-reviewer/scripts/prescan.py prompt.txt
 ```
 
 ```bash
-cat prompt.txt | python3 scripts/prescan.py - --json
+cat prompt.txt | python3 skills/prompt-security-reviewer/scripts/prescan.py - --json
 ```
 
 Its output is a list of leads, not verdicts: it has false positives and cannot see missing controls.
@@ -63,10 +72,11 @@ Its output is a list of leads, not verdicts: it has false positives and cannot s
 ## Repository layout
 
 ```
-SKILL.md                 Skill definition and workflow
-references/              One file per framework, plus hardening patterns and output templates
-scripts/prescan.py       Mechanical pre-scan
-tests/                   Unit tests for the pre-scan
+.claude-plugin/plugin.json                      Plugin manifest
+skills/prompt-security-reviewer/SKILL.md        Skill definition and workflow
+skills/prompt-security-reviewer/references/     One file per framework, plus hardening patterns and output templates
+skills/prompt-security-reviewer/scripts/        Mechanical pre-scan (prescan.py)
+tests/                                          Unit tests for the pre-scan
 ```
 
 ## Development
