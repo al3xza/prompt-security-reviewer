@@ -19,7 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.13"]
+        # Oldest and newest versions available on ubuntu-latest. Python 3.9 (macOS's
+        # built-in version) is no longer offered there; it is tested locally.
+        python-version: ["3.10", "3.13"]
     steps:
       # Actions are pinned to full commit SHAs; the tag is in the comment.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
