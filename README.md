@@ -51,11 +51,11 @@ Paste or attach a prompt and ask something like:
 `scripts/prescan.py` is a deterministic scanner the skill runs first. It flags hardcoded secrets, PII patterns, unguarded variable interpolation, risky tool verbs and override language. You can also run it on its own:
 
 ```bash
-python scripts/prescan.py prompt.txt
+python3 scripts/prescan.py prompt.txt
 ```
 
 ```bash
-cat prompt.txt | python scripts/prescan.py - --json
+cat prompt.txt | python3 scripts/prescan.py - --json
 ```
 
 Its output is a list of leads, not verdicts: it has false positives and cannot see missing controls.
@@ -66,7 +66,22 @@ Its output is a list of leads, not verdicts: it has false positives and cannot s
 SKILL.md                 Skill definition and workflow
 references/              One file per framework, plus hardening patterns and output templates
 scripts/prescan.py       Mechanical pre-scan
+tests/                   Unit tests for the pre-scan
 ```
+
+## Development
+
+The pre-scan uses only the Python standard library (3.9 or later). Run the tests with:
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+GitHub Actions runs the same tests on every push and pull request.
+
+## Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md). Please don't open a public issue.
 
 ## Limits
 

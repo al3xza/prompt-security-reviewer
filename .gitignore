@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local prompt files you scan; keep real prompts out of the repo
+*.prompt.txt
+scratch/
+
+# Packaged skill builds
+*.skill
+*.zip

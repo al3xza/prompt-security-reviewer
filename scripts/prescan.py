@@ -2,9 +2,9 @@
 """Deterministic pre-scan of a prompt for mechanical security/privacy red flags.
 
 Usage:
-    python prescan.py prompt.txt
-    cat prompt.txt | python prescan.py -
-    python prescan.py prompt.txt --json
+    python3 prescan.py prompt.txt
+    cat prompt.txt | python3 prescan.py -
+    python3 prescan.py prompt.txt --json
 
 Output is a list of *leads* for a human or model reviewer. It has false positives and
 cannot detect missing controls. Matched secrets and personal data are redacted.
@@ -92,6 +92,29 @@ def redact(s: str) -> str:
     return s if len(s) <= 6 else s[:4] + "…REDACTED"
 
 
+# Rules whose matches are always hidden in full.
+_HIDDEN_RULES = {"SECRET-API-KEY", "SECRET-ASSIGN", "PRIVATE-KEY", "PII-EMAIL", "PII-SSN", "PII-CARD"}
+_URL_USERINFO = re.compile(r"(?i)(\b[a-z][a-z0-9+.\-]*://)[^/\s@]+@")
+_URL_PARAM_VALUE = re.compile(r"([?&;#][^=&;#\s]+=)[^&;#\s]+")
+_URL_FRAGMENT = re.compile(r"(://[^\s#]*#)[^\s]+")
+
+
+def scrub(s: str) -> str:
+    """Remove secrets and personal data from a match that is otherwise shown.
+
+    Non-sensitive rules (for example EXTERNAL-FETCH) can match text that contains a
+    secret, such as a URL with a token in its query string. Hide URL credentials,
+    query and fragment values, and anything a hidden rule would match.
+    """
+    s = _URL_USERINFO.sub(r"\1REDACTED@", s)
+    s = _URL_PARAM_VALUE.sub(r"\1REDACTED", s)
+    s = _URL_FRAGMENT.sub(r"\1REDACTED", s)
+    for rid, _sev, _label, rx, _fw, _hint in RULES:
+        if rid in _HIDDEN_RULES:
+            s = re.sub(rx, "REDACTED", s)
+    return s
+
+
 def scan(text: str):
     findings = []
     lines = text.splitlines() or [text]
@@ -112,7 +135,7 @@ def scan(text: str):
                     done = True
                     break
                 hide = sev == "Critical" or rid.startswith("PII")
-                shown = redact(matched) if hide else matched.strip()[:80]
+                shown = redact(matched) if hide else scrub(matched.strip())[:80]
                 findings.append({"rule": rid, "severity": sev, "label": label, "line": i,
                                  "match": shown, "frameworks": fw, "hint": hint})
             if done:
@@ -127,13 +150,17 @@ def main():
         print(__doc__)
         sys.exit(2)
     if args[0] == "-":
-        text = sys.stdin.read()
+        text = sys.stdin.buffer.read().decode("utf-8", errors="replace")
     else:
-        with open(args[0], encoding="utf-8", errors="replace") as fh:
-            text = fh.read()
+        try:
+            with open(args[0], encoding="utf-8", errors="replace") as fh:
+                text = fh.read()
+        except OSError as exc:
+            print(f"prescan: cannot read {args[0]!r}: {exc.strerror}", file=sys.stderr)
+            sys.exit(2)
     findings = scan(text)
-    order = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
-    findings.sort(key=lambda f: (order[f["severity"]], f["line"]))
+    order = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3, "Info": 4}
+    findings.sort(key=lambda f: (order.get(f["severity"], 99), f["line"]))
     if as_json:
         print(json.dumps(findings, indent=2, ensure_ascii=False))
         return
