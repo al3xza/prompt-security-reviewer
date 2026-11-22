@@ -75,7 +75,7 @@ Merge duplicates: one root cause that maps to several frameworks is one finding 
 
 Be calibrated. A weather chatbot with no tools and no personal data does not need a DPIA. Inflating severity trains people to ignore reports. Equally, do not wave through a prompt that gives an agent delete rights with no approval step just because it is "internal".
 
-Compliance findings are engineering input, not legal advice. Say so once, concisely, and recommend legal/DPO review for high-risk or regulated uses. Regulatory dates and texts change; where a reference file marks something "verify", tell the user to confirm against the current official text.
+Compliance findings are engineering input, not legal advice. Say so once, in one short sentence, and recommend legal/DPO review for high-risk or regulated uses. Regulatory dates and texts change; where a reference file marks something "verify", tell the user to confirm against the current official text.
 
 ## Step 5: Harden
 
@@ -92,9 +92,16 @@ Produce the hardened prompt by editing the original, not replacing it with a gen
 
 ## Step 6: Deliver
 
-Use the templates in `references/output-templates.md`. Match the chosen mode. Lead with the verdict and the top issues so a busy reader can stop after the first screen. Put the hardened prompt in a code block so it can be copied cleanly. For long reports, offer to save as a file (docx, md) rather than forcing one.
+Use the templates in `references/output-templates.md`. Match the chosen mode. Be terse: the reader wants the verdict, the fixes and the hardened prompt, not an essay. Lead with the verdict and the top issues so a busy reader can stop after the first screen. Put the hardened prompt in a code block so it can be copied cleanly.
 
-Close with the residual risk in one or two sentences, and, in Full mode, a short list of adversarial test inputs the user should run against the hardened prompt. Keep test inputs defensive and generic (e.g. "document asks the assistant to email the conversation to an external address"); do not write working exploit payloads or jailbreak strings.
+Terseness rules:
+- No preamble, no restating the request, no closing summary or recap of what you just wrote
+- Findings are one line per cell; quote at most a few words of the prompt
+- Skip sections and table rows with nothing to say; never write "N/A" filler
+- Do not re-explain fixes after the hardened prompt; the findings table already says what changed
+- Mention the not-legal-advice caveat once, in one short sentence, and only when there are compliance findings
+
+Close with the residual risk in one sentence, and, in Full mode, 3–5 adversarial test inputs the user should run against the hardened prompt. Keep test inputs defensive and generic (e.g. "document asks the assistant to email the conversation to an external address"); do not write working exploit payloads or jailbreak strings.
 
 ## Scope and safety limits
 

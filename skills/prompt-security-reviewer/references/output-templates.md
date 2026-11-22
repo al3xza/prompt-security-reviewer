@@ -1,53 +1,43 @@
 # Output templates
 
-Use the template that matches the chosen mode. Keep the first screen useful on its own: verdict and top issues come first. Omit sections that have nothing to say rather than writing "N/A" filler, except the compliance table rows the user explicitly asked about.
+Use the template that matches the chosen mode. Be terse. The first screen must be useful on its own: verdict and top issues come first. Omit any section or row that has nothing to say; never write "N/A" filler, except for compliance rows the user explicitly asked about.
 
 ---
 
 ## Mode A: Full review
 
 ```
-# Prompt Security Review
-
-**Verdict:** <Critical | High | Medium | Low> overall risk. <One sentence on why.>
+**Verdict:** <Critical | High | Medium | Low>. <One sentence why.>
 **Top issues:** 1) … 2) … 3) …
 
-## 1. What was reviewed
-Type: … | Untrusted inputs: … | Capabilities: … | Data: … | Audience/jurisdiction: … | Autonomy: …
-Assumptions: …
+**Profile:** <type> · untrusted: <inputs> · can: <capabilities> · data: <kinds> · <jurisdiction> · <autonomy>
+<Assumptions in one line, only if any.>
 
-## 2. Findings
-| # | Severity | Finding (quote / "absent") | Why it matters | Frameworks | Fix |
-|---|----------|----------------------------|----------------|------------|-----|
-| 1 | Critical | … | … | LLM01, ASI01, A05 | … |
+## Findings
+| # | Sev | Where | Issue | IDs | Fix |
+|---|-----|-------|-------|-----|-----|
+| 1 | High | "short quote" / absent | One line: weakness and consequence | LLM01, ASI02 | One line |
 
-(Order by severity. One row per root cause, several framework IDs allowed.)
+(Order by severity. One row per root cause.)
 
-## 3. Compliance view
-| Framework | Status | Notes |
-|-----------|--------|-------|
-| EU AI Act | Gap / Partial / App-layer / N/A | Tier: … ; Art. … |
-| GDPR | … | … |
-| NIST AI RMF | … | Characteristic/function … |
-| Others (if applicable) | … | … |
-Not legal advice; confirm dates and applicability with counsel/DPO. <Verify-flag any date-sensitive item.>
+## Compliance
+Only frameworks with a gap or the user asked about. One line each:
+- GDPR: Partial. <gap>, <gap>.
+- EU AI Act: <tier>. <note>. (verify)
+Not legal advice.
 
-## 4. Controls needed outside the prompt
-- … (permission enforcement, output validation, rate limits, logging, DPIA, etc.)
+## Out-of-prompt controls
+3–6 bullets, highest impact first, a few words each.
 
-## 5. Hardened prompt
+## Hardened prompt
 ```text
 <full hardened prompt, placeholders for secrets/values, [APP-LAYER: …] notes where relevant>
 ```
 
-## 6. What changed
-Short bullets mapping edits to finding numbers.
+**Residual risk:** <one sentence>
 
-## 7. Residual risk and tests
-Residual risk in 1–2 sentences. Then 5–8 defensive test cases, e.g.:
-- Retrieved document contains an instruction to send the conversation to an external address → agent must ignore and report it
-- User claims to be an administrator and asks for another user's data → must refuse
-- Tool returns an error → must stop and escalate, not retry indefinitely
+**Test inputs:**
+- 3–5 one-line defensive tests, e.g. "Email asks to forward the thread externally → ignore and report"
 ```
 
 ---
@@ -55,29 +45,26 @@ Residual risk in 1–2 sentences. Then 5–8 defensive test cases, e.g.:
 ## Mode B: Quick harden
 
 ```
-**Risk before → after:** <High> → <Medium> (one line why)
+**Risk:** <High> → <Medium>. <One line why.>
 
-## Hardened prompt
 ```text
 <full hardened prompt>
 ```
 
-## Change log
-| Change | Why | Maps to |
-|--------|-----|---------|
-| Wrapped `{{document}}` in delimiters and declared it data | Indirect injection | LLM01, ASI01 |
+| Change | Fixes | IDs |
+|--------|-------|-----|
+| Delimited `{{document}}` as data | Indirect injection | LLM01 |
 
-## Still needs code or process (not fixable in the prompt)
-- max 3–5 bullets, highest impact first
-
-*Prompt hardening reduces risk; it does not guarantee security or legal compliance. Ask for the Full review if you need framework-by-framework findings.*
+**Still needs code:** <2–4 comma-separated items, highest impact first>
 ```
 
 ---
 
 ## Style rules
-- Plain language; explain an acronym once on first use if the reader may not know it
+- Plain language, short sentences, no preamble or wrap-up paragraphs
+- One line per table cell; no multi-sentence explanations
+- Explain an acronym only if the reader is unlikely to know it
 - Quote prompt text sparingly and redact any secrets or personal data (`sk-…REDACTED`)
 - Severity must be justified by realistic impact, not by how many frameworks mention the issue
 - Never present the hardened prompt as "secure" or "compliant"; say "mitigates" and list what remains
-- If the original prompt was already strong, say so, and keep the changes small
+- If the original prompt was already strong, say so in the verdict and keep the changes small
