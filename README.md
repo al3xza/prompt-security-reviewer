@@ -77,3 +77,7 @@ scripts/prescan.py       Mechanical pre-scan
 ## Author
 
 See [AUTHORS](AUTHORS).
+
+## License
+
+[MIT](LICENSE)
